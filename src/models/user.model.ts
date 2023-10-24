@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import IUser from "../interfaces/user.interface";
-
+import bcrypt from "bcrypt";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -26,11 +26,33 @@ const UserSchema = new Schema<IUser>(
       default: "usuario",
       enum: ["admin", "usuario"],
     },
+    imagenUrl: {
+      type: String,
+      lowercase: true,
+      pattern: "http//",
+      required: [true, "La url es obligatoria"],
+      trim: true,
+      
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: true },
   }
 );
 
+
+UserSchema.methods.guardarContraseña =
+  async function guardarContraseña(): Promise<boolean> {
+    const user = this as any;
+    const salt = await bcrypt.genSalt(10);
+    user.contraseña = await bcrypt.hash(user.contraseña, salt);
+    return true;
+  };
+
+UserSchema.methods.validarContraseña = function validarContraseña(
+  contraseña: string
+): Promise<boolean> {
+  return bcrypt.compare(contraseña, (this as any).contraseña);
+};
 
 export default model<IUser>("User", UserSchema);

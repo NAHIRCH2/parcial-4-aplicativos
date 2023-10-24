@@ -40,12 +40,13 @@ const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv = __importStar(require("dotenv"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const configure = (app) => __awaiter(void 0, void 0, void 0, function* () {
     dotenv.config();
     app.use((0, morgan_1.default)("dev"));
     app.use((0, cors_1.default)());
     app.use(express_1.default.urlencoded({ extended: false }));
     app.use(express_1.default.json());
-    console.log("🟢 Middlewares configurated");
+    logger_1.default.info("🟢 Middlewares configurated");
 });
 exports.configure = configure;

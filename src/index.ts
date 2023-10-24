@@ -1,3 +1,7 @@
-import app from "./app";
-app.listen(app.get("port"));
-console.log("🟢 Server on port", app.get("port"));
+import App from "./app";
+import logger from "./utils/logger";
+const app=App;
+
+app.listen(app.get('port'),()=>{
+logger.info( `🟢 app listening on the port" ${ app.get("port")} `);
+});

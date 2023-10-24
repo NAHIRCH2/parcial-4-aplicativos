@@ -9,7 +9,7 @@ const logger = (0, winston_1.createLogger)({
     format: combine(timestamp(), myFormat),
     transports: [
         new winston_1.transports.Console(),
-        new winston_1.transports.File({ filename: 'logs/app.log' }) // Esto guardará logs en un archivo llamado app.log en una carpeta 'logs'. Asegúrate de que la carpeta exista o de crearla.
+        new winston_1.transports.File({ filename: 'logs/app.log' })
     ],
 });
 exports.default = logger;

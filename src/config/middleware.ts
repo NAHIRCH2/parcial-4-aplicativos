@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { Application } from "express";
 import morgan from "morgan";
 import * as dotenv from "dotenv";
+import logger from "../utils/logger";
 
 
 export const configure = async (app: Application) => {
@@ -11,6 +12,5 @@ export const configure = async (app: Application) => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-
-  console.log("🟢 Middlewares configurated");
+  logger.info("🟢 Middlewares configurated");
 };

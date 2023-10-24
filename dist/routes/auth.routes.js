@@ -26,10 +26,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const authController = __importStar(require("../controllers/auth.controller"));
 const userValidators_1 = require("../middlewares/validators/userValidators");
-const validatIon_middleware_1 = require("../middlewares/validatIon.middleware");
+const validation_middleware_1 = require("../middlewares/validation.middleware");
 const router = (0, express_1.Router)();
 // REGISTRAR
-router.post("/signup", ...userValidators_1.authSingupValidators, validatIon_middleware_1.handleValidationErrors, authController.signup);
+router.post("/signup", ...userValidators_1.authSingupValidators, validation_middleware_1.handleValidationErrors, authController.signup);
 // INICIAR SESION
-router.post("/login", ...userValidators_1.authLoginValidators, validatIon_middleware_1.handleValidationErrors, authController.login);
+router.post("/login", ...userValidators_1.authLoginValidators, validation_middleware_1.handleValidationErrors, authController.login);
 exports.default = router;

@@ -25,13 +25,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userController = __importStar(require("../controllers/user.controller"));
-const router = (0, express_1.Router)().use();
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const validation_middleware_1 = require("../middlewares/validation.middleware");
+const userValidators_1 = require("../middlewares/validators/userValidators");
+const admin_1 = require("../middlewares/admin");
+const router = (0, express_1.Router)();
 // OBTENER TODOS
 router.get("/", userController.index);
 // CREAR
-router.post("/", userController.create);
+router.post("/", auth_middleware_1.authMiddleware, admin_1.admin, ...userValidators_1.authSingupValidators, validation_middleware_1.handleValidationErrors, userController.create);
 // OBTENER UNO
 router.get("/:id", userController.show);
 // BORRAR
-router.delete("/:id", userController.destroy);
+router.delete("/:id", auth_middleware_1.authMiddleware, admin_1.admin, userValidators_1.mongoIdValidator, userController.destroy);
 exports.default = router;

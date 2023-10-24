@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unauthorizedexception = exports.BadRequestException = exports.NotFoundException = exports.HttpException = void 0;
+exports.FileExists = exports.unauthorizedexception = exports.BadRequestException = exports.NotFoundException = exports.HttpException = void 0;
 class HttpException extends Error {
     constructor(status, message) {
         super(message);
@@ -22,8 +22,14 @@ class BadRequestException extends HttpException {
 }
 exports.BadRequestException = BadRequestException;
 class unauthorizedexception extends HttpException {
-    constructor(message = 'unauthorized') {
+    constructor(message = 'error authotication') {
         super(401, message);
     }
 }
 exports.unauthorizedexception = unauthorizedexception;
+class FileExists extends HttpException {
+    constructor(message = 'unauthorized') {
+        super(500, message);
+    }
+}
+exports.FileExists = FileExists;

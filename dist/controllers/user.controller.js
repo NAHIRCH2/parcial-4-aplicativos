@@ -14,24 +14,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.destroy = exports.show = exports.create = exports.index = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
+const http_exception_1 = require("../utils/http.exception");
 const index = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield user_model_1.default.find();
         return res.status(200).json(users);
     }
     catch (error) {
-        return next(error);
+        next(new http_exception_1.FileExists("Internal Server Error"));
     }
 });
 exports.index = index;
 const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, email, contraseña, rol } = req.body;
+        const { nombre, email, contraseña, rol, imagenUrl } = req.body;
+        if (yield user_model_1.default.findOne({ nombre })) {
+            throw new http_exception_1.BadRequestException("este usuario ya fue registrado");
+        }
         const user = new user_model_1.default({
             nombre,
             email,
             contraseña,
             rol,
+            imagenUrl,
         });
         yield user.save();
         return res.status(200).json(user);
@@ -45,10 +50,13 @@ const show = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { id } = req.params;
         const user = yield user_model_1.default.findById(id);
+        if (!user) {
+            throw new http_exception_1.NotFoundException("User not found");
+        }
         return res.status(200).json(user);
     }
     catch (error) {
-        return next(error);
+        next(error);
     }
 });
 exports.show = show;
@@ -56,13 +64,14 @@ const destroy = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const { id } = req.params;
         const user = yield user_model_1.default.findById(id);
-        if (!user)
-            return res.status(404).json("Not existe");
+        if (!user) {
+            throw new http_exception_1.NotFoundException("User not found");
+        }
         yield user.deleteOne();
         return res.status(200).json(user);
     }
     catch (error) {
-        return next(error);
+        next(error);
     }
 });
 exports.destroy = destroy;

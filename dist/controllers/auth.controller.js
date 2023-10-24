@@ -29,18 +29,19 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const http_exception_1 = require("../utils/http.exception");
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { nombre, email, contraseña, rol } = req.body;
+        const { nombre, email, contraseña, rol, imagenUrl } = req.body;
         if (yield user_model_1.default.findOne({ email })) {
-            throw new http_exception_1.BadRequestException('The user is already registered');
+            throw new http_exception_1.BadRequestException("este usuario ya fue registrado");
         }
         let user = new user_model_1.default({
             nombre,
             email,
             contraseña,
             rol,
+            imagenUrl,
         });
         if ((yield user.guardarContraseña()) === false) {
-            throw new http_exception_1.BadRequestException("Password encryption failed");
+            throw new http_exception_1.BadRequestException("fallo el cifrado  de contraseña");
         }
         yield user.save();
         // Devolver datos
@@ -48,7 +49,7 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         return res.json(userData);
     }
     catch (err) {
-        return next(err);
+        next(err);
     }
 });
 exports.signup = signup;
@@ -58,11 +59,10 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             .select("+contraseña")
             .orFail(new http_exception_1.NotFoundException("User not found"));
         if (!user.contraseña)
-            throw new http_exception_1.HttpException(401, "Unauthorized, missing password");
+            throw new http_exception_1.HttpException(401, "Contraseña faltante");
         const correctPassword = yield user.validarContraseña(req.body.contraseña);
         if (!correctPassword)
-            throw new http_exception_1.HttpException(401, "Invalid Password");
-        // Create a Token
+            throw new http_exception_1.unauthorizedexception("Contraseña incorrecta");
         const token = jsonwebtoken_1.default.sign({ sub: user._id }, process.env.JWT_SECRET || "", {
             expiresIn: process.env.JWT_EXPIRATION,
         });

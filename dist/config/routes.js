@@ -13,9 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = void 0;
-const user_route_1 = __importDefault(require("../routes/user.route"));
+const user_routes_1 = __importDefault(require("../routes/user.routes"));
+const auth_routes_1 = __importDefault(require("../routes/auth.routes"));
+const product_routes_1 = __importDefault(require("../routes/product.routes"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const register = (app) => __awaiter(void 0, void 0, void 0, function* () {
-    app.use("/users", user_route_1.default);
-    console.log("🟢 Routes registered");
+    app.use("/users", user_routes_1.default);
+    app.use("/auth", auth_routes_1.default);
+    app.use("/products", product_routes_1.default);
+    logger_1.default.info("🟢 Routes registered");
 });
 exports.register = register;

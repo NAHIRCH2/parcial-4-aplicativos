@@ -15,17 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const http_exception_1 = require("../utils/http.exception");
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.headers.authorization)
-            return next(res.status(401).json("Missing authorization header."));
+            throw new http_exception_1.BadRequestException("introduce un token");
         req.token = req.headers.authorization.split(" ")[1];
         const decoded = jsonwebtoken_1.default.verify(req.token, process.env.JWT_SECRET || "");
         if (!decoded)
-            return next(res.status(401).json("Unauthorized."));
+            throw new http_exception_1.unauthorizedexception("error a verificar el token ");
         const userFound = yield user_model_1.default.findById(decoded.sub);
         if (!userFound)
-            return res.status(401).json("Unauthorized");
+            throw new http_exception_1.unauthorizedexception("usuario no existe en el login");
         req.user = userFound;
         next();
     }

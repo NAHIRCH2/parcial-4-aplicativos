@@ -14,13 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configure = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+const logger_1 = __importDefault(require("../utils/logger"));
 const configure = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect("mongodb://127.0.0.1:27017/database-parcial-cuatro");
-        console.log("🟢 Connected to the database");
+        logger_1.default.info("🟢 Connected to the database");
     }
     catch (error) {
-        console.error("Error connecting to the database:", error);
+        logger_1.default.error("Error connecting to the database:", error);
     }
 });
 exports.configure = configure;

@@ -30,6 +30,7 @@ const express_1 = __importDefault(require("express"));
 const middlewares = __importStar(require("./config/middleware"));
 const database = __importStar(require("./config/database"));
 const routes = __importStar(require("./config/routes"));
+const error_handler_1 = __importDefault(require("./middlewares/error.handler"));
 // inicialization
 const app = (0, express_1.default)();
 // settings
@@ -40,4 +41,6 @@ database.configure();
 middlewares.configure(app);
 // Routes
 routes.register(app);
+//error handler
+app.use(error_handler_1.default);
 exports.default = app;
